@@ -105,6 +105,8 @@ func receive_appwatcher(c *gin.Context) {
 func sendAnnotation(annotation Annotation) {
 	client := http.Client{}
 
+ //	data := "events title=\"" + annotation.Title + "\",text=\"" + annotation.Text + "\",tags=\"" + annotation.Tags + "\",app=\"" + annotation.App + "\",value=1.0 " + annotation.Eventtime 
+
 	data := "events,apptag="+annotation.App+",dynotypetag="+strings.Split(strings.Split(annotation.Tags,",")[3],".")[0]+" title=\"" + annotation.Title + "\",text=\"" + annotation.Text + "\",tags=\"" + annotation.Tags + "\",app=\"" + annotation.App + "\",value=1.0 " + annotation.Eventtime
 
 	databytes := []byte(data)
