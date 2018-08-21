@@ -8,7 +8,7 @@ import (
 	"net/http"
 	"os"
 	"strconv"
-        "strings"
+	"strings"
 	"time"
 )
 
@@ -104,7 +104,13 @@ func receive_appwatcher(c *gin.Context) {
 
 func sendAnnotation(annotation Annotation) {
 	client := http.Client{}
-	data := "events,apptag="+annotation.App+",dynotypetag="+strings.Split(strings.Split(annotation.Tags,",")[3],".")[0]+" title=\"" + annotation.Title + "\",text=\"" + annotation.Text + "\",tags=\"" + annotation.Tags + "\",app=\"" + annotation.App + "\",value=1.0 " + annotation.Eventtime
+	var data string
+	if annotation.Title == "crashed" {
+		data = "events,apptag=" + annotation.App + ",dynotypetag=" + strings.Split(strings.Split(annotation.Tags, ",")[3], ".")[0] + " title=\"" + annotation.Title + "\",text=\"" + annotation.Text + "\",tags=\"" + annotation.Tags + "\",app=\"" + annotation.App + "\",value=1.0 " + annotation.Eventtime
+	}
+	if annotation.Title == "released" {
+		data = "events,apptag=" + annotation.App + ",dynotypetag=all title=\"" + annotation.Title + "\",text=\"" + annotation.Text + "\",tags=\"" + annotation.Tags + "\",app=\"" + annotation.App + "\",value=1.0 " + annotation.Eventtime
+	}
 	databytes := []byte(data)
 
 	req, err := http.NewRequest("POST", influxURL+influxURI, bytes.NewBuffer(databytes))
